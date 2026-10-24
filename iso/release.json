@@ -1,0 +1,11 @@
+{
+  "name": "AllyOS",
+  "id": "allyos",
+  "version": "0.3.2",
+  "channel": "development",
+  "base": "Debian GNU/Linux",
+  "base_version": "13",
+  "codename": "trixie",
+  "architecture": "amd64",
+  "author": "gorigamia"
+}

@@ -1,0 +1,11 @@
+[SddmGreeterTheme]
+Name=AllyOS
+Description=AllyOS login — RoseShell on Debian
+Author=gorigamia
+License=GPL-3.0-or-later
+Type=sddm-theme
+Version=0.2.1
+Theme-Id=allyos
+MainScript=Main.qml
+ConfigFile=theme.conf
+QtVersion=6

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#191c1e"/>
+  <path d="M32 174h576M32 421h576" stroke="#626a65" stroke-width="1"/>
+  <path d="M32 177h576" stroke="#bd8b9a" stroke-width="3"/>
+  <g transform="translate(47 24) scale(1.65)" stroke="#25272e" stroke-width="1.2">
+    <path d="m32 5 7 17 18 6-15 8-2 19-8-10-9 11-1-19-15-9 18-6Z" fill="#c6a05b"/>
+    <path d="m32 15 11 14-11 15-11-15Z" fill="#729f91"/>
+    <path d="m32 15 1 14H21Z" fill="#c2d7bf"/>
+  </g>
+  <g font-family="DejaVu Sans, sans-serif" fill="#eee7dc">
+    <text x="170" y="64" font-size="34" font-weight="bold">AllyOS @ALLY_VERSION@</text>
+    <text x="171" y="97" font-size="16" fill="#c58f9d">RoseShell</text>
+    <text x="171" y="125" font-size="14" fill="#b9c7bf">Base Debian GNU/Linux 13 (trixie)</text>
+    <text x="32" y="454" font-size="12" fill="#b9c7bf">gorigamia</text>
+  </g>
+</svg>

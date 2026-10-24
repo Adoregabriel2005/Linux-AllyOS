@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_config xmlns="http://openbox.org/3.4/rc">
+  <focus><focusNew>yes</focusNew><followMouse>no</followMouse></focus>
+  <theme><name>RoseShell</name><titleLayout>NLIMC</titleLayout>
+    <font place="ActiveWindow"><name>Sans</name><size>10</size><weight>Bold</weight></font>
+  </theme>
+  <desktops><number>1</number></desktops>
+  <applications>
+    <!-- Relatórios não devem herdar posições de um monitor maior. -->
+    <application class="qterminal" type="normal">
+      <position force="yes"><x>center</x><y>center</y></position>
+      <size><width>85%</width><height>75%</height></size>
+    </application>
+  </applications>
+  <keyboard>
+    <keybind key="A-Tab"><action name="NextWindow"><dialog>icons</dialog><bar>yes</bar><raise>no</raise><panels>no</panels><desktop>no</desktop></action></keybind>
+    <keybind key="A-S-Tab"><action name="PreviousWindow"><dialog>icons</dialog><bar>yes</bar><raise>no</raise><panels>no</panels><desktop>no</desktop></action></keybind>
+    <keybind key="C-S-Escape"><action name="Execute"><command>roseshell-task-manager</command></action></keybind>
+    <keybind key="W-e"><action name="Execute"><command>thunar</command></action></keybind>
+    <keybind key="A-F4"><action name="Close"/></keybind>
+    <keybind key="A-F10"><action name="ToggleMaximize"/></keybind>
+    <keybind key="C-A-t"><action name="Execute"><command>qterminal</command></action></keybind>
+    <keybind key="Print"><action name="Execute"><command>roseshell-capture</command></action></keybind>
+  </keyboard>
+  <mouse>
+    <context name="Titlebar">
+      <mousebind button="Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind>
+      <mousebind button="Left" action="Drag"><action name="Move"/></mousebind>
+      <mousebind button="Left" action="DoubleClick"><action name="ToggleMaximize"/></mousebind>
+    </context>
+    <context name="Frame"><mousebind button="A-Right" action="Drag"><action name="Resize"/></mousebind></context>
+    <context name="Client"><mousebind button="Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind></context>
+    <context name="Close"><mousebind button="Left" action="Click"><action name="Close"/></mousebind></context>
+    <context name="Maximize"><mousebind button="Left" action="Click"><action name="ToggleMaximize"/></mousebind></context>
+    <context name="Iconify"><mousebind button="Left" action="Click"><action name="Iconify"/></mousebind></context>
+  </mouse>
+</openbox_config>

@@ -1,0 +1,21 @@
+# Base funcional da sessão; preserva rede, áudio, arquivos, tarefas e SuperTux.
+supertux
+openbox
+libxcb-cursor0
+libglib2.0-bin
+iproute2
+pciutils
+pulseaudio-utils
+wmctrl
+thunar
+xfce4-taskmanager
+mate-polkit
+network-manager-gnome
+x11-xkb-utils
+util-linux
+usbutils
+pavucontrol
+alsa-ucm-conf
+firmware-amd-graphics
+firmware-nvidia-graphics
+qt6ct

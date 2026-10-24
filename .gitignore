@@ -1,0 +1,10 @@
+vms/
+.venv/
+__pycache__/
+*.pyc
+iso/build-preview/
+iso/build-preview-*/
+iso/output/
+shell/.vm-command.json
+shell/.vm-command-*.json
+iso/local-assets/
