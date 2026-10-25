@@ -1,10 +1,10 @@
 # AllyOS / RoseShell
 
-**AllyOS 0.3.2 (em validação)** é a distribuição derivada do Debian 13;
+**AllyOS 0.3.3 (em validação)** é a distribuição derivada do Debian 13;
 **RoseShell** é a interface. A receita da ISO, o tema de login SDDM e a
 identidade com versão estão em `iso/`. Consulte `docs/ALLYOS-ISO.md`.
 A primeira ISO 0.01 foi instalada em disco BIOS e iniciou a RoseShell.
-A revisão 0.3.2 acrescenta Calamares e perfis de aplicativos; sua instalação
+A revisão 0.3.3 acrescenta Calamares e perfis de aplicativos; sua instalação
 precisa de validação própria. Veja `docs/VALIDACAO-ISO.md`,
 `docs/APPS-E-INSTALADOR.md` e `docs/VERSOES.md`.
 
@@ -88,7 +88,7 @@ prompts em `shell/assets/PROMPTS.md`. Referências anexadas não incluídas.
 ## Validação na VM
 
 Execute `.venv/bin/python verify.py` no Debian. Verifica descoberta real de
-apps, precedência e filtros XDG, renderização de ícones, busca, sete imagens,
+apps, precedência e filtros XDG, renderização de ícones, busca, oito imagens,
 troca de wallpaper, rotação, formatos, colagem de imagem e preferências. Os aplicativos gráficos
 podem ser abertos pela biblioteca com duplo clique ou Enter.
 
@@ -100,7 +100,7 @@ após encerrar a origem. Testes geométricos não substituem avaliação física
 
 `verify_shortcuts.py` valida arraste, posições persistentes, tamanhos,
 visibilidade, remoção sem apagar o app e reutilização do cache de wallpaper.
-`verify_variants.py` valida os 21 arquivos e seleção pela proporção.
+`verify_variants.py` valida os 24 arquivos e seleção pela proporção.
 `verify_lifecycle.py` confirma que fechar configurações não encerra o shell.
 `verify_tasks.py` valida janelas abertas, ativação, Alt+Tab e fechamento com
 Openbox em display isolado. A barra lista janelas e permite restaurar,

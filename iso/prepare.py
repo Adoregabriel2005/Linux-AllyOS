@@ -139,7 +139,7 @@ fi
     shutil.copytree(ROOT / 'shell/assets/wallpapers', desktop / 'usr/lib/roseshell/assets/wallpapers')
     shutil.copytree(ROOT / 'shell/assets/sounds', desktop / 'usr/lib/roseshell/assets/sounds')
     local_sound = ROOT / 'iso/local-assets/startup-local.wav'
-    if local_sound.is_file():
+    if local_sound.is_file() and os.environ.get('ALLYOS_PUBLIC_BUILD') != '1':
         copy(local_sound, desktop, 'usr/lib/roseshell/assets/sounds/startup-local.wav')
     copy(ROOT / 'shell/assets/icons/wine-hand.png', desktop, 'usr/share/pixmaps/allyos-wine.png')
     copy(ROOT / 'shell/assets/icons/wine-hand.png', desktop, 'usr/lib/roseshell/assets/icons/wine-hand.png')
@@ -148,7 +148,7 @@ fi
     copy(ROOT / 'shell/task-manager.sh', desktop, 'usr/bin/roseshell-task-manager')
     (desktop / 'usr/bin/roseshell-task-manager').chmod(0o755)
     put(desktop, 'usr/share/xsessions/roseshell.desktop', '[Desktop Entry]\nName=RoseShell\nComment=AllyOS desktop on Debian\nExec=/usr/bin/roseshell-session\nTryExec=/usr/bin/roseshell-session\nType=Application\nDesktopNames=RoseShell;\n')
-    put(desktop, 'usr/share/applications/allyos-fastfetch.desktop', '[Desktop Entry]\nName=Fastfetch\nType=Application\nExec=sh /usr/lib/roseshell/diagnostic-terminal.sh fastfetch\nTerminal=true\nIcon=utilities-system-monitor\nCategories=System;Monitor;\n')
+    put(desktop, 'usr/share/applications/allyos-fastfetch.desktop', '[Desktop Entry]\nName=Fastfetch\nType=Application\nTryExec=fastfetch\nExec=sh /usr/lib/roseshell/diagnostic-terminal.sh fastfetch\nTerminal=true\nIcon=utilities-system-monitor\nCategories=System;Monitor;\n')
     put(desktop, 'usr/share/applications/allyos-wine.desktop', '[Desktop Entry]\nName=Wine — Windows applications\nName[pt_BR]=Wine — Aplicativos Windows\nType=Application\nExec=roseshell-wine %f\nTryExec=wine\nIcon=/usr/share/pixmaps/allyos-wine.png\nMimeType=application/x-ms-dos-executable;application/x-msdownload;application/vnd.microsoft.portable-executable;application/x-msi;\nCategories=System;Emulator;\n')
     put(desktop, 'etc/skel/.dmrc', '[Desktop]\nSession=roseshell\n')
     put(desktop, 'etc/NetworkManager/conf.d/10-allyos.conf', '[ifupdown]\nmanaged=true\n')
@@ -248,6 +248,7 @@ grep -q '^ID=allyos$' /usr/lib/os-release
 ln -sfn ../usr/lib/os-release /etc/os-release
 grep -q '^ID=allyos' /etc/os-release
 dpkg-query -W > /usr/share/allyos/package-versions.txt
+dpkg-query -W -f='${binary:Package}\\t${Version}\\t${source:Package}\\t${source:Version}\\n' > /usr/share/allyos/package-sources.tsv
 ''', True)
     copy(ROOT / 'shell/vendor/tuxmanager-source-v1.0.8.tar.gz', output, 'config/includes.binary/sources/tuxmanager-source-v1.0.8.tar.gz')
     copy(ROOT / 'iso/vendor/neofetch', output, 'config/includes.binary/sources/neofetch-7.1.0')

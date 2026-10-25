@@ -86,9 +86,12 @@ class StatusArea(QWidget):
         timer.setSingleShot(True)
         timer.timeout.connect(process.kill)
         process.finished.connect(lambda code, status: finished(code))
+        settled = False
         def finished(code):
-            if not isValid(process):
+            nonlocal settled
+            if settled or not isValid(process):
                 return
+            settled = True
             timer.stop()
             output = bytes(process.readAllStandardOutput()).decode(errors='replace').strip()
             try:
@@ -100,6 +103,8 @@ class StatusArea(QWidget):
                 if process in self.processes:
                     self.processes.remove(process)
                 process.deleteLater()
+        process.errorOccurred.connect(lambda error: finished(-1)
+            if error == QProcess.ProcessError.FailedToStart else None)
         process.start(args[0], args[1:])
         timer.start(4000)
 

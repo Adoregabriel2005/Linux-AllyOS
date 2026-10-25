@@ -106,6 +106,7 @@ EN = {
 
 
 EN.update({
+    'Não foi possível iniciar este aplicativo.': 'This application could not be started.',
     'Escolha um programa Windows ou abra a configuração do Wine.': 'Choose a Windows program or open Wine settings.',
     'Wine não está instalado neste perfil.': 'Wine is not installed in this profile.',
     'Não foi possível iniciar o Wine.': 'Could not start Wine.',
@@ -120,6 +121,15 @@ EN.update({
     'Interfaces USB compatíveis usam ALSA, PipeWire e WirePlumber. A detecção abaixo informa os dispositivos presentes; não confirma compatibilidade de modelos ausentes.': 'Compatible USB interfaces use ALSA, PipeWire and WirePlumber. Detection below lists connected devices; it does not confirm compatibility of absent models.',
     'Tocar som ao entrar na sessão': 'Play sound when signing in',
     'Testar controle de jogo…': 'Test game controller…',
+})
+
+EN.update({
+    'NVTOP não está instalado neste perfil.': 'NVTOP is not installed in this profile.',
+    'A GPU virtual desta máquina não fornece métricas ao NVTOP. Consulte a GPU em Informações de hardware.': 'This virtual GPU does not provide NVTOP metrics. See GPU identification in Hardware information.',
+    'O driver da GPU não forneceu métricas ao NVTOP. Consulte a GPU em Informações de hardware.': 'The GPU driver did not provide NVTOP metrics. See GPU identification in Hardware information.',
+    'Não foi possível consultar a GPU neste momento.': 'GPU information could not be queried at this time.',
+    'Este aplicativo não está instalado neste perfil.': 'This application is not installed in this profile.',
+    'Este aplicativo não está disponível nesta sessão. Atualize ou remova o atalho.': 'This application is not available in this session. Update or remove its shortcut.',
 })
 
 _fragments = tuple(sorted(EN, key=len, reverse=True))

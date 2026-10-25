@@ -5,6 +5,7 @@ import locale
 import os
 from pathlib import Path
 import shutil
+import shlex
 
 from PySide6.QtCore import QSize, Qt, QProcess, QProcessEnvironment
 from PySide6.QtGui import QIcon, QFontMetrics
@@ -24,6 +25,31 @@ def desktop_icon(name):
                 if source.is_file():
                     return QIcon(str(source))
     return icon
+
+
+def entry_is_available(identity, entry):
+    from hardware_capabilities import live_session, nvtop_status
+    if entry.get('TryExec') and not shutil.which(entry['TryExec']):
+        return False
+    internal = {'qt6ct.desktop', 'qt5ct.desktop', 'obconf.desktop', 'obconf-qt.desktop',
+                'kdesystemsettings.desktop', 'systemsettings.desktop', 'org.kde.systemsettings.desktop'}
+    if identity in internal:
+        return False
+    try:
+        executable = shlex.split(entry['Exec'])[0]
+    except (ValueError, IndexError):
+        return False
+    if not shutil.which(executable):
+        return False
+    installer = {'allyos-install.desktop', 'calamares-install-debian.desktop',
+                 'calamares.desktop', 'debian-installer-launcher.desktop', 'debian-installer.desktop'}
+    if identity in installer or Path(executable).name.startswith(('calamares', 'debian-installer')):
+        return identity == 'allyos-install.desktop' and live_session() and bool(shutil.which('calamares'))
+    if identity == 'nvtop.desktop' or Path(executable).name == 'nvtop':
+        return nvtop_status()[0]
+    if identity == 'xfce4-taskmanager.desktop' and shutil.which('tux-manager'):
+        return False
+    return True
 
 
 def installed_apps():
@@ -52,6 +78,8 @@ def installed_apps():
                 if (only != [''] and 'RoseShell' not in only) or 'RoseShell' in excluded:
                     continue
                 if entry.get('TryExec') and not shutil.which(entry['TryExec']):
+                    continue
+                if not entry_is_available(identity, entry):
                     continue
                 name = entry.get(f'Name[{lang}]', entry.get(f'Name[{lang.split("_")[0]}]', entry.get('Name', path.stem)))
                 result.append({'name': name, 'path': str(path), 'icon': entry.get('Icon', ''),
@@ -177,6 +205,17 @@ class ApplicationLibrary(QDialog):
         self.launch_entry(item.data(Qt.ItemDataRole.UserRole))
 
     def launch_entry(self, app):
+        # Re-check stale desktop shortcuts after uninstalling an app or leaving Live.
+        parser = configparser.ConfigParser(interpolation=None, strict=False)
+        try:
+            parser.read(app['path'], encoding='utf-8')
+            entry = parser['Desktop Entry']
+            if not entry_is_available(Path(app['path']).name, entry):
+                raise ValueError('Unavailable application')
+        except (OSError, KeyError, ValueError, UnicodeError, configparser.Error):
+            QMessageBox.information(self.panel, tr('Aplicativo indisponível'),
+                                    tr('Este aplicativo não está disponível nesta sessão. Atualize ou remova o atalho.'))
+            return
         gio = shutil.which('gio')
         if not gio:
             QMessageBox.information(self, 'RoseShell', tr('Instale libglib2.0-bin para abrir aplicativos.'))
@@ -184,6 +223,8 @@ class ApplicationLibrary(QDialog):
         process = QProcess(self)
         self.processes.append(process)
         process.finished.connect(lambda code, status, p=process: self.launch_finished(p, code))
+        process.errorOccurred.connect(lambda error, p=process: self.launch_finished(p, -1)
+            if error == QProcess.ProcessError.FailedToStart else None)
         if ('supertux' in Path(app['path']).name.lower() and
                 self.panel.settings.value('performance', 'economy') == 'economy' and
                 Path('/usr/games/supertux2').is_file()):
@@ -197,9 +238,12 @@ class ApplicationLibrary(QDialog):
         self.hide()
 
     def launch_finished(self, process, code):
+        if process not in self.processes:
+            return
         if code:
             QMessageBox.warning(self.panel, tr('RoseShell — falha ao abrir'),
-                                bytes(process.readAllStandardError()).decode(errors='replace')[:600])
+                                bytes(process.readAllStandardError()).decode(errors='replace')[:600]
+                                or tr('Não foi possível iniciar este aplicativo.'))
         if process in self.processes:
             self.processes.remove(process)
         process.deleteLater()

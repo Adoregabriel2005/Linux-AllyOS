@@ -20,8 +20,10 @@ for process in Path('/proc').glob('[0-9]*'):
         continue
 assert environment.get('DISPLAY'), 'Entrar na sessão gráfica de teste antes de executar'
 environment.update(ROSESHELL_NESTED='1', ROSESHELL_LANGUAGE='pt_BR')
-for size, scale in [('640x480', '1'), ('640x480', '1.25'), ('1280x1024', '1'),
-                    ('1920x1080', '1'), ('3840x2160', '1')]:
+for size, scale in [('640x480', '1'), ('640x480', '1.25'), ('800x600', '1'),
+                    ('1024x768', '1'), ('1280x720', '1'), ('1280x1024', '1'),
+                    ('1366x768', '1'), ('1600x900', '1'), ('1920x1080', '1'),
+                    ('2560x1440', '1'), ('3840x2160', '1')]:
     with open('/mnt/allyos-output/xephyr-resolution.log', 'w') as log:
         server = subprocess.Popen(['Xephyr', ':12', '-screen', size, '-ac', '-nolisten', 'tcp'],
                                   env=environment, stdout=log, stderr=subprocess.STDOUT)

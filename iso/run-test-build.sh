@@ -14,7 +14,7 @@ if [ ! -d "$sources" ]; then
     mv "$temporary" "$sources"
 fi
 test "$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$sources/iso/release.json")" = "$version"
-if [ -f /mnt/allyos-src/iso/local-assets/startup-local.wav ]; then
+if [ "${ALLYOS_PUBLIC_BUILD:-0}" != 1 ] && [ -f /mnt/allyos-src/iso/local-assets/startup-local.wav ]; then
     mkdir -p "$sources/iso/local-assets"
     cp /mnt/allyos-src/iso/local-assets/startup-local.wav "$sources/iso/local-assets/startup-local.wav"
 fi

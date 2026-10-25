@@ -37,7 +37,7 @@ def main():
         assert panel.library.list.item(0).isHidden()
         panel.library.close()
         paths = bundled_wallpapers()
-        assert len(paths) == 7, f'Esperados sete wallpapers; encontrados {len(paths)}'
+        assert len(paths) == 8, f'Esperados oito wallpapers; encontrados {len(paths)}'
         panel.set_wallpaper(str(paths[0]))
         panel.next_wallpaper()
         assert panel.settings.value('wallpaper') == str(paths[1])
@@ -48,7 +48,7 @@ def main():
         panel.configure_rotation()
         assert not panel.rotation_timer.isActive()
         panel.open_wallpapers()
-        assert panel.wallpaper_library.list.count() == 7
+        assert panel.wallpaper_library.list.count() == 8
         panel.wallpaper_library.close()
         from PySide6.QtGui import QImage, QImageReader, QColor
         image = QImage(32, 24, QImage.Format.Format_RGB32)
@@ -99,7 +99,7 @@ def main():
         app.processEvents()
         from PySide6.QtCore import QCoreApplication, QEvent
         QCoreApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
-        print('OK: catalogo XDG, icones, busca, sete wallpapers, troca e modo fixo.', flush=True)
+        print('OK: catalogo XDG, icones, busca, oito wallpapers, troca e modo fixo.', flush=True)
 
 
 if __name__ == '__main__':

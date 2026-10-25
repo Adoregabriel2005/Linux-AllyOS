@@ -18,7 +18,7 @@ for process in Path('/proc').glob('[0-9]*'):
             if sep and key in (b'DISPLAY', b'XAUTHORITY', b'DBUS_SESSION_BUS_ADDRESS',
                                b'QT_QPA_PLATFORMTHEME', b'GTK_THEME', b'QT_SCALE_FACTOR',
                                b'XDG_CURRENT_DESKTOP', b'XDG_SESSION_DESKTOP',
-                               b'XDG_SESSION_TYPE', b'LANG', b'LC_ALL', b'LC_MESSAGES', b'PATH'):
+                               b'XDG_SESSION_TYPE', b'XDG_RUNTIME_DIR', b'LANG', b'LC_ALL', b'LC_MESSAGES', b'PATH'):
                 environment[key.decode()] = data.decode()
         found = True
         break
