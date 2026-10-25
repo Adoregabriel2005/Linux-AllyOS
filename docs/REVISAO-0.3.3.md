@@ -23,7 +23,9 @@ Passaram na VM descartável: catálogo real e precedência XDG; formatos de foto
 clipboard, configurações e indicadores; idiomas PT/EN; diagnósticos mínimos;
 falha real de inicialização de processo; oito imagens em três proporções;
 fechamento de configurações sem encerrar o desktop; duas janelas com Alt+Tab
-e remoção da barra ao fechar; X11 em 640×480, 125%, 1280×1024, 1080p e 4K.
+e remoção da barra ao fechar; X11 em 640×480 (100% e 125%), 800×600,
+1024×768, 1280×720, 1280×1024, 1366×768, 1600×900, 1920×1080,
+2560×1440 e 3840×2160.
 
 Esses resultados validam a revisão do código. A instalação da ISO 0.3.3 e o
 primeiro boot ainda precisam de validação própria. Nenhuma release da ISO foi
