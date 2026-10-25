@@ -7,12 +7,14 @@ import re
 from pathlib import Path
 import subprocess
 import tempfile
+import yaml
 
 parser = argparse.ArgumentParser()
 parser.add_argument('image', type=Path)
 parser.add_argument('report', type=Path)
 args = parser.parse_args()
 image = args.image.resolve()
+version = json.loads(Path('/mnt/allyos-src/iso/release.json').read_text())['version']
 assert os.geteuid() == 0 and image.is_file()
 report = {'passed': False, 'image': image.name}
 with tempfile.TemporaryDirectory(prefix='allyos-iso-audit-') as directory:
@@ -32,7 +34,7 @@ with tempfile.TemporaryDirectory(prefix='allyos-iso-audit-') as directory:
         report['restricted_b43_firmware_absent'] = True
         report['local_audio_absent'] = True
         identity = read('usr/lib/os-release').decode()
-        assert 'ID=allyos\n' in identity and 'VERSION_ID="0.3.3"' in identity and 'ID_LIKE=debian' in identity
+        assert 'ID=allyos\n' in identity and f'VERSION_ID="{version}"' in identity and 'ID_LIKE=debian' in identity
         report['identity'] = identity
         accounts = [line.split(':')[0] for line in read('etc/passwd').decode().splitlines()
                     if 1000 <= int(line.split(':')[2]) < 65534]
@@ -57,7 +59,12 @@ with tempfile.TemporaryDirectory(prefix='allyos-iso-audit-') as directory:
             assert statuses[name]['Status'] == 'install ok installed', name
         report['core_packages'] = {name: statuses[name]['Version'] for name in
                                   ('allyos-desktop', 'tux-manager', 'firefox-esr', 'wine64', 'wine32:i386')}
-        assert (media / 'sources/allyos-source-0.3.3.tar.gz').is_file()
+        cleanup = yaml.safe_load(read('etc/calamares/modules/packages.conf'))
+        cleanup_packages = [name for operation in cleanup['operations'] for name in operation.get('remove', [])]
+        for name in cleanup_packages:
+            assert statuses.get(name, {}).get('Status') == 'install ok installed', ('installer cleanup', name)
+        report['installer_cleanup_packages_installed'] = cleanup_packages
+        assert (media / f'sources/allyos-source-{version}.tar.gz').is_file()
         pool = list((media / 'pool').rglob('*.deb'))
         assert any(path.name.startswith('grub-pc_') for path in pool)
         assert any(path.name.startswith('grub-efi_') for path in pool)

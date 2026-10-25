@@ -39,7 +39,18 @@ rm -f "$CHROOT/etc/apt/sources.list"''')
     put(overlay, 'usr/share/calamares/helpers/calamares-sources-media', media_helper, True)
     put(overlay, 'usr/share/calamares/helpers/calamares-sources-final', final_helper, True)
     package_config = overlay / 'etc/calamares/modules/packages.conf'
-    package_config.write_text(package_config.read_text(encoding='utf-8') + "      - 'calamares'\n", encoding='utf-8', newline='\n')
+    # Our image does not install Debian Live task metapackages. With only the
+    # offline bootloader repository active, APT cannot resolve absent names.
+    put(overlay, 'etc/calamares/modules/packages.conf', '''backend: apt
+operations:
+  - remove:
+      - live-boot
+      - live-config
+      - live-config-systemd
+      - live-tools
+      - calamares-settings-debian
+      - calamares
+''')
     settings = overlay / 'etc/calamares/settings.conf'
     text = settings.read_text(encoding='utf-8').replace('branding: debian', 'branding: allyos')
     text = text.replace('  - users\n  - summary', '  - users\n  - packagechooser\n  - summary')

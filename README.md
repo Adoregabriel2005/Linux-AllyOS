@@ -1,11 +1,12 @@
 # AllyOS / RoseShell
 
-**AllyOS 0.3.3 (em validação)** é a distribuição derivada do Debian 13;
+**AllyOS 0.3.4 (em validação)** é a distribuição derivada do Debian 13;
 **RoseShell** é a interface. A receita da ISO, o tema de login SDDM e a
 identidade com versão estão em `iso/`. Consulte `docs/ALLYOS-ISO.md`.
 A primeira ISO 0.01 foi instalada em disco BIOS e iniciou a RoseShell.
-A revisão 0.3.3 acrescenta Calamares e perfis de aplicativos; sua instalação
-precisa de validação própria. Veja `docs/VALIDACAO-ISO.md`,
+A revisão 0.3.4 corrige a limpeza do instalador Calamares após o teste da
+0.3.3. A instalação da nova imagem ainda está em validação. Veja
+`docs/REVISAO-0.3.4.md`, `docs/VALIDACAO-ISO.md`,
 `docs/APPS-E-INSTALADOR.md` e `docs/VERSOES.md`.
 
 Ambiente gráfico próprio sobre Debian, em desenvolvimento. Python e Qt 6

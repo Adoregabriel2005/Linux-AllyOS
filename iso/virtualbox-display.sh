@@ -25,6 +25,8 @@ Section "OutputClass"
     Identifier "AllyOS VirtualBox VMSVGA"
     MatchDriver "vmwgfx"
     Driver "modesetting"
+    Option "AccelMethod" "none"
+    Option "SWcursor" "true"
 EndSection
 CONFIG
 elif [ -f "$configuration" ] && grep -q '^# AllyOS-managed:' "$configuration"; then

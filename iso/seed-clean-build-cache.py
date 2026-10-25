@@ -14,7 +14,7 @@ assert not target.exists(), 'A fresh build directory is required'
 target.mkdir()
 (target / 'allyos-build.json').write_text(json.dumps(release))
 count = 0
-for previous in ('build-0.2.1', 'build-0.3.2'):
+for previous in ('build-0.2.1', 'build-0.3.2', 'build-0.3.3'):
     for kind in ('packages.bootstrap', 'packages.chroot'):
         source = base / previous / 'cache' / kind
         destination = target / 'cache' / kind
