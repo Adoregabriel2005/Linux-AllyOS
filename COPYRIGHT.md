@@ -23,6 +23,12 @@ fornecidas na conversa não são licenciadas pelo projeto nem integram essa conc
 Cada componente mantém sua própria autoria e licença. A licença RoseShell
 não substitui as licenças desses componentes.
 
+A imagem pública não inclui o firmware Broadcom b43/b43legacy extraído por
+instaladores, cuja redistribuição é proibida pelo fornecedor. Os instaladores
+são removidos antes de compactar a imagem; esses dispositivos podem exigir
+instalação individual do firmware após instalar o sistema. Referência técnica:
+https://wireless.docs.kernel.org/en/latest/en/users/drivers/b43/firmware.html.
+
 - TuxManager: GPL-3.0-or-later; pacote oficial preservado, fonte da versão
   correspondente e procedência em `shell/vendor/`.
 - Qt/PySide6: opções de licença definidas pelo projeto Qt, incluindo LGPL/GPL;

@@ -229,6 +229,8 @@ def prepare(output, pack=True):
     # live-config exports this setting before its SDDM component runs. Its
     # built-in session detection only handles Plasma and LXQt.
     put(output, 'config/includes.chroot/etc/live/config.conf.d/50-allyos.conf', 'LIVE_SESSION="roseshell.desktop"\n')
+    copy(ROOT / 'iso/public-firmware-cleanup.sh', output, 'config/hooks/normal/0998-public-firmware.hook.chroot')
+    (output / 'config/hooks/normal/0998-public-firmware.hook.chroot').chmod(0o755)
     put(output, 'config/hooks/normal/0999-allyos.hook.chroot', '''#!/bin/sh
 set -eu
 printf 'pt_BR.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n' > /etc/locale.gen

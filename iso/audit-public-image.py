@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -27,6 +28,8 @@ with tempfile.TemporaryDirectory(prefix='allyos-iso-audit-') as directory:
         listing = subprocess.check_output(['unsquashfs', '-ll', str(filesystem)], text=True)
         assert 'startup-local.wav' not in listing
         assert 'vm-command-bridge.py' not in listing
+        assert not re.search(r'squashfs-root/(?:usr/)?lib/firmware/b43(?:legacy)?(?:/|$)', listing, re.MULTILINE)
+        report['restricted_b43_firmware_absent'] = True
         report['local_audio_absent'] = True
         identity = read('usr/lib/os-release').decode()
         assert 'ID=allyos\n' in identity and 'VERSION_ID="0.3.3"' in identity and 'ID_LIKE=debian' in identity
