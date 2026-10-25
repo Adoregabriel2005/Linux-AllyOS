@@ -2,13 +2,13 @@
 
 Formato: `release.revisão.compilação`, sem zeros à esquerda.
 
-- **release**: número da versão pública. `0` identifica desenvolvimento;
-  a primeira versão pública será `1`.
+- **release**: número da versão estável. `0` identifica desenvolvimento,
+  inclusive pré-releases públicas para testes; a primeira estável será `1`.
 - **revisão**: conjunto de alterações do código dentro da release. Não é
   quantidade de linhas ou arquivos, que muda sem representar uma atualização.
 - **compilação**: tentativa de gerar a imagem daquela revisão.
 
-A próxima imagem é **0.3.3**. A primeira imagem experimental **0.01** continua
+A próxima imagem é **0.3.4**. A primeira imagem experimental **0.01** continua
 arquivada, com o hash e as evidências dos testes; não é sobrescrita.
 Uma nova revisão começa com compilação 1. Uma nova release começa com revisão 0.
 O arquivo `iso/release.json` é a fonte para pacotes, ISO, login, Sobre e os-release.

@@ -16,6 +16,25 @@ REPOSITORY = 'Adoregabriel2005/Linux-AllyOS'
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class UploadFile:
+    def __init__(self, path):
+        self.stream = path.open('rb')
+        self.name = path.name
+        self.total = path.stat().st_size
+        self.sent = self.reported = 0
+
+    def read(self, size=-1):
+        data = self.stream.read(size)
+        self.sent += len(data)
+        if self.sent > self.reported and (self.sent - self.reported >= 64 * 1024 ** 2 or self.sent == self.total):
+            print(f'Upload {self.name}: {self.sent}/{self.total} bytes ({self.sent * 100 // self.total}%)', flush=True)
+            self.reported = self.sent
+        return data
+
+    def close(self):
+        self.stream.close()
+
+
 def digest(path):
     with path.open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
@@ -32,6 +51,7 @@ def main():
     assert manifest['validated'] is True and manifest['public_audio'] == 'original'
     assert manifest['repository'] == REPOSITORY
     assert manifest['notes'] and manifest['notes'] != 'NOTES_PENDING'
+    assert 'RESULTADO_DA_INSTALACAO_PENDENTE' not in manifest['notes']
     assets = []
     for entry in manifest['assets']:
         path = (manifest_path.parent / entry['name']).resolve()
@@ -48,11 +68,11 @@ def main():
                'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'AllyOS-release-builder'}
 
     def request(method, endpoint, data=None, host='api.github.com', file=None):
-        connection = http.client.HTTPSConnection(host, timeout=1800)
+        connection = http.client.HTTPSConnection(host, timeout=1800, blocksize=1024 * 1024)
         outgoing = dict(headers)
         body = None
         if file:
-            body = file.open('rb')
+            body = UploadFile(file)
             outgoing.update({'Content-Type': 'application/octet-stream', 'Content-Length': str(file.stat().st_size)})
         elif data is not None:
             body = json.dumps(data).encode()
@@ -80,15 +100,24 @@ def main():
     known = {entry['name']: entry for entry in request('GET', base + f'/releases/{release["id"]}/assets?per_page=100')}
     for path, entry in assets:
         existing = known.get(path.name)
+        if (existing and existing['state'] == 'starter' and not existing.get('digest')
+                and existing['size'] in (0, entry['size'])):
+            # GitHub reserves the declared size before upload completion.
+            # Only discard the unfinished matching asset in this draft.
+            request('DELETE', base + f'/releases/assets/{existing["id"]}')
+            existing = None
         if existing:
+            assert existing['state'] == 'uploaded'
             assert existing['size'] == entry['size']
-            assert existing.get('digest') == 'sha256:' + entry['sha256']
+            if existing.get('digest'):
+                assert existing['digest'] == 'sha256:' + entry['sha256']
             continue
         print('Enviando', path.name, path.stat().st_size, flush=True)
         uploaded = request('POST', base + f'/releases/{release["id"]}/assets?name=' + urllib.parse.quote(path.name),
                            host='uploads.github.com', file=path)
         assert uploaded['size'] == entry['size'] and uploaded['state'] == 'uploaded'
-        assert uploaded.get('digest') == 'sha256:' + entry['sha256']
+        if uploaded.get('digest'):
+            assert uploaded['digest'] == 'sha256:' + entry['sha256']
     if args.publish:
         release = request('PATCH', base + f'/releases/{release["id"]}', {'draft': False})
     print(json.dumps({'url': release['html_url'], 'draft': release['draft'], 'assets_verified': len(assets)}))

@@ -42,6 +42,7 @@ with tempfile.TemporaryDirectory(prefix='allyos-iso-audit-') as directory:
         report['personal_accounts_absent'] = True
         for name in ('applications.py', 'hardware_capabilities.py', 'diagnostics.py', 'system_ui.py'):
             assert read('usr/lib/roseshell/' + name) == (Path('/mnt/interface-src') / name).read_bytes(), name
+        assert read('usr/lib/allyos/virtualbox-display') == Path('/mnt/allyos-src/iso/virtualbox-display.sh').read_bytes()
         report['reviewed_runtime_matches_source'] = True
         statuses = {}
         for paragraph in read('var/lib/dpkg/status').decode().split('\n\n'):
